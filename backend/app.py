@@ -23,6 +23,10 @@ app = Flask(__name__);
 def home():
     return "Welcome to Flask's backend api";
 
+@app.route('/submittodoitem',methods = ["POST"])
+def submit_todo():
+    return "Items submitted successfully";
+
 @app.route('/submit',methods = ["POST"])
 def submit():
     
