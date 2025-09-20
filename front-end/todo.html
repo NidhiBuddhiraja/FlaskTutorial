@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit New Item</title>
+    <style>
+        /* Basic Reset & Body Styling */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 90vh; /* Increased height slightly for better visibility */
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 20px; /* Add some padding around the page */
+            box-sizing: border-box;
+        }
+
+        /* Form Container */
+        .form-container {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 12px; /* Slightly more rounded corners */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15); /* Deeper shadow */
+            text-align: center;
+            width: 100%; /* Take full width on small screens */
+            max-width: 500px; /* Max width for larger screens */
+            box-sizing: border-box;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 35px; /* More space below heading */
+            font-size: 30px; /* Larger heading */
+            font-weight: 600;
+        }
+
+        /* Form Group Styling */
+        .form-group {
+            margin-bottom: 25px; /* More space between groups */
+            text-align: left;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px; /* More space below label */
+            color: #555;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        /* Input & Textarea Styling */
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 15px 18px; /* More padding */
+            border: 1px solid #ccc;
+            border-radius: 7px; /* Rounded corners for inputs */
+            box-sizing: border-box;
+            font-size: 17px; /* Slightly larger font */
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* Input Focus Styling */
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.25); /* More pronounced focus shadow */
+            outline: none;
+        }
+
+        /* Styling for Invalid Input */
+        .form-group input:invalid,
+        .form-group textarea:invalid {
+            border-color: #dc3545; /* Red border for invalid input */
+            box-shadow: 0 0 0 4px rgba(220, 53, 69, 0.25);
+        }
+
+        /* Textarea Specific Styling */
+        .form-group textarea {
+            resize: vertical; /* Allow vertical resizing */
+            min-height: 100px; /* Minimum height */
+        }
+
+        /* Button Styling */
+        button[type="submit"] {
+            background-color: #28a745; /* Green submit button */
+            color: white;
+            padding: 15px 25px; /* Larger button padding */
+            border: none;
+            border-radius: 7px; /* Match input rounding */
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            width: 100%;
+            transition: background-color 0.3s ease, transform 0.2s ease; /* Add transform for hover effect */
+            margin-top: 15px; /* Space above button */
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3); /* Subtle shadow on button */
+        }
+
+        button[type="submit"]:hover {
+            background-color: #218838; /* Darker green on hover */
+            transform: translateY(-2px); /* Slight lift effect */
+        }
+
+        /* Error Message Styling */
+        .error-message {
+            color: #dc3545; /* Red color for errors */
+            font-size: 0.85em; /* Smaller font size */
+            margin-top: 8px; /* Space above error */
+            display: none; /* Hidden by default, shown by JS */
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <h2>Submit New Item Details</h2>
+        <form id="itemForm" action="/submit-item" method="post">
+            <!-- Item Details Fields -->
+            <div class="form-group">
+                <label for="itemName">Item Name:</label>
+                <input type="text"
+                       id="itemName"
+                       name="itemName"
+                       placeholder="e.g., High-Performance Laptop"
+                       required>
+                <div class="error-message" id="itemName-error"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="itemDescription">Item Description:</label>
+                <textarea id="itemDescription"
+                          name="itemDescription"
+                          rows="5" /* Increased rows for more space */
+                          placeholder="Describe the item in detail, including its features, condition, and any special notes."
+                          required></textarea>
+                <div class="error-message" id="itemDescription-error"></div>
+            </div>
+
+            <button type="submit">Submit Item</button>
+
+        </form>
+    </div>
+
+    <script>
+        const form = document.getElementById('itemForm');
+        const emailInput = document.getElementById('email');
+        const phoneInput = document.getElementById('phoneNumber');
+        const itemNameInput = document.getElementById('itemName');
+        const itemDescriptionTextarea = document.getElementById('itemDescription');
+
+        const emailError = document.getElementById('email-error');
+        const phoneError = document.getElementById('phone-error');
+        const itemNameError = document.getElementById('itemName-error');
+        const itemDescriptionError = document.getElementById('itemDescription-error');
+
+        // Function to show error messages
+        function showError(element, message) {
+            element.textContent = message;
+            element.style.display = 'block';
+            // Optional: Add a class to input/textarea for specific styling if needed
+            // element.previousElementSibling.classList.add('input-error');
+        }
+
+        // Function to clear error messages
+        function clearError(element) {
+            element.textContent = '';
+            element.style.display = 'none';
+            // Optional: Remove error class
+            // if (element.previousElementSibling) {
+            //    element.previousElementSibling.classList.remove('input-error');
+            // }
+        }
+
+        // Add event listeners for real-time validation feedback
+        emailInput.addEventListener('input', function() {
+            if (emailInput.validity.valid) {
+                clearError(emailError);
+            } else if (emailInput.validity.valueMissing) {
+                showError(emailError, 'Email is required.');
+            } else {
+                showError(emailError, 'Please enter a valid email address.');
+            }
+        });
+
+        phoneInput.addEventListener('input', function() {
+            if (phoneInput.validity.valid) {
+                clearError(phoneError);
+            } else if (phoneInput.validity.valueMissing) {
+                showError(phoneError, 'Phone number is required.');
+            } else {
+                showError(phoneError, 'Please enter a valid phone number.');
+            }
+        });
+
+        itemNameInput.addEventListener('input', function() {
+            if (itemNameInput.validity.valid) {
+                clearError(itemNameError);
+            } else if (itemNameInput.validity.valueMissing) {
+                showError(itemNameError, 'Item name is required.');
+            }
+        });
+
+        itemDescriptionTextarea.addEventListener('input', function() {
+            if (itemDescriptionTextarea.validity.valid) {
+                clearError(itemDescriptionError);
+            } else if (itemDescriptionTextarea.validity.valueMissing) {
+                showError(itemDescriptionError, 'Item description is required.');
+            }
+        });
+
+        // Event listener for form submission
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            let isFormValid = true;
+
+            // Validate Email
+            if (!emailInput.validity.valid) {
+                isFormValid = false;
+                showError(emailError, emailInput.validity.valueMissing ? 'Email is required.' : 'Please enter a valid email address.');
+            } else {
+                clearError(emailError);
+            }
+
+            // Validate Phone Number
+            if (!phoneInput.validity.valid) {
+                isFormValid = false;
+                showError(phoneError, phoneInput.validity.valueMissing ? 'Phone number is required.' : 'Please enter a valid phone number.');
+            } else {
+                clearError(phoneError);
+            }
+
+            // Validate Item Name
+            if (!itemNameInput.validity.valid) {
+                isFormValid = false;
+                showError(itemNameError, 'Item name is required.');
+            } else {
+                clearError(itemNameError);
+            }
+
+            // Validate Item Description
+            if (!itemDescriptionTextarea.validity.valid) {
+                isFormValid = false;
+                showError(itemDescriptionError, 'Item description is required.');
+            } else {
+                clearError(itemDescriptionError);
+            }
+
+            // If all fields are valid, proceed with submission using fetch API
+            if (isFormValid) {
+                console.log('Form is valid. Submitting...');
+                const formData = new FormData(form);
+                const data = Object.fromEntries(formData.entries());
+
+                fetch(form.action, {
+                    method: form.method,
+                    headers: {
+                        'Content-Type': 'application/json', // Assuming backend expects JSON
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        // If server returns an error status (e.g., 400, 500)
+                        return response.json().then(err => { throw err; }); // Throw the JSON error from server
+                    }
+                    return response.json(); // Parse successful response as JSON
+                })
+                .then(result => {
+                    console.log('Success:', result);
+                    alert('Item details submitted successfully!');
+                    form.reset(); // Clear the form fields
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // Display specific error messages from the backend if available
+                    if (error.errors) {
+                        for (const field in error.errors) {
+                            const errorElement = document.getElementById(`${field}-error`);
+                            if (errorElement) {
+                                showError(errorElement, error.errors[field]);
+                            } else {
+                                // Fallback for errors not mapped to specific fields
+                                alert(`Submission error: ${error.errors[field]}`);
+                            }
+                        }
+                    } else {
+                        // Generic error message if backend error structure is different or unknown
+                        alert('An error occurred during submission. Please try again later.');
+                    }
+                });
+            } else {
+                console.log('Form is invalid. Please correct the errors.');
+            }
+        });
+
+        // Initial setup: Hide all error messages when the page loads
+        clearError(emailError);
+        clearError(phoneError);
+        clearError(itemNameError);
+        clearError(itemDescriptionError);
+
+    </script>
+
+</body>
+</html>
