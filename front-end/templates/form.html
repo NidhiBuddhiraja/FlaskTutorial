@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registration</title>
+  <style>
+    /* Simple reset and font */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #6b73ff 0%, #000dff 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: #333;
+    }
+
+    /* Form container */
+    .signup-form {
+      background: #fff;
+      padding: 2.5rem 3rem;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      width: 320px;
+      box-sizing: border-box;
+      text-align: center;
+    }
+
+    .signup-form h2 {
+      margin-bottom: 1.5rem;
+      color: #222;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    /* Form element styles */
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      margin-bottom: 0.3rem;
+      font-weight: 600;
+      text-align: left;
+      color: #444;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      padding: 10px 12px;
+      margin-bottom: 1.2rem;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+      outline: none;
+    }
+
+    input[type="text"]:focus,
+    input[type="password"]:focus {
+      border-color: #5a63ff;
+      box-shadow: 0 0 8px rgba(90, 99, 255, 0.3);
+    }
+
+    /* Submit button */
+    button[type="submit"] {
+      background-color: #5a63ff;
+      color: white;
+      padding: 12px 0;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      font-weight: 700;
+      transition: background-color 0.3s ease;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #434dcf;
+    }
+
+    /* Responsive tweaks */
+    @media (max-width: 360px) {
+      .signup-form {
+        width: 90%;
+        padding: 1.5rem 2rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="signup-form">
+    <h2>Create Account</h2>
+    <form action="/submit" method="post" autocomplete="off">
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" placeholder="Enter username" required autocomplete="username" />
+
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" placeholder="Enter password" required
+        autocomplete="new-password" />
+
+      <button type="submit">Sign Up</button>
+    </form>
+    <br/><br/>
+    <a href="get_data"> <button type="submit" style="padding:10px;">View Data</button> </a>
+  </div>
+</body>
+
+</html>
