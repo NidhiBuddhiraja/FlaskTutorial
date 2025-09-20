@@ -21,7 +21,7 @@ app = Flask(__name__);
 # Upload data to the database
 @app.route('/')
 def home():
-    return "Welcome to backend api";
+    return "Welcome to Flask's backend api";
 
 @app.route('/submit',methods = ["POST"])
 def submit():
